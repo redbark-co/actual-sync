@@ -122,7 +122,7 @@ export class RedbarkClient {
 
         if (response.status === 401) {
           throw new RedbarkApiError(
-            'Redbark API returned 401 Unauthorized. Your API key may be revoked or expired.\n  → Check https://app.redbark.io/settings/api-keys',
+            'Redbark API returned 401 Unauthorized. Your API key may be revoked or expired.\n  → Check https://app.redbark.co/settings/api-keys',
             response.status
           )
         }

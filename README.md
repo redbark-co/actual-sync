@@ -1,6 +1,6 @@
 # Redbark Actual Sync
 
-Automatically sync bank transactions from [Redbark](https://redbark.io) to your self-hosted [Actual Budget](https://actualbudget.org/) instance.
+Automatically sync bank transactions from [Redbark](https://redbark.co) to your self-hosted [Actual Budget](https://actualbudget.org/) instance.
 
 Ships as a single Docker image. Pull, configure, schedule, done.
 
@@ -17,7 +17,7 @@ Supports all Redbark banking providers: Fiskil (AU), Akahu (NZ), SnapTrade (glob
 
 ### 1. Get a Redbark API Key
 
-1. Log into [Redbark](https://app.redbark.io)
+1. Log into [Redbark](https://app.redbark.co)
 2. Go to **Settings > API Keys**
 3. Create a key and copy it (shown once)
 
@@ -82,7 +82,7 @@ docker run --rm --env-file .env \
 | `ACTUAL_PASSWORD` | Yes | — | Actual Budget server password |
 | `ACTUAL_BUDGET_ID` | Yes | — | Budget sync ID (Settings > Advanced in Actual) |
 | `ACCOUNT_MAPPING` | Yes | — | Account mapping (see below) |
-| `REDBARK_API_URL` | No | `https://app.redbark.io` | Redbark API base URL |
+| `REDBARK_API_URL` | No | `https://app.redbark.co` | Redbark API base URL |
 | `ACTUAL_ENCRYPTION_PASSWORD` | No | — | E2E encryption password if enabled |
 | `ACTUAL_DATA_DIR` | No | `./data` | Local cache directory for Actual's SQLite DB |
 | `SYNC_DAYS` | No | `30` | Number of days of history to sync |

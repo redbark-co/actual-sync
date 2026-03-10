@@ -16,7 +16,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@actual-app/api": "^26.2.0",
+    "@actual-app/api": "^26.3.0",
     "pino": "^9.6.0",
     "zod": "^3.24.2"
   },

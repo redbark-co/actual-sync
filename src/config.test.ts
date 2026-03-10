@@ -54,7 +54,7 @@ describe('loadConfig', () => {
 
   it('applies defaults', () => {
     const config = loadConfig(validEnv)
-    expect(config.redbarkApiUrl).toBe('https://app.redbark.io')
+    expect(config.redbarkApiUrl).toBe('https://app.redbark.co')
     expect(config.actualDataDir).toBe('./data')
     expect(config.syncDays).toBe(30)
   })
