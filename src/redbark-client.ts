@@ -13,18 +13,25 @@ interface TransactionsParams {
   limit?: number
 }
 
-interface TransactionsResponse {
-  transactions: RedbarkTransaction[]
-  cursor: string | null
+interface PaginationInfo {
+  total: number
+  limit: number
+  offset: number
   hasMore: boolean
 }
 
+interface TransactionsResponse {
+  data: RedbarkTransaction[]
+  pagination: PaginationInfo
+}
+
 interface ConnectionsResponse {
-  connections: RedbarkConnection[]
+  data: RedbarkConnection[]
 }
 
 interface AccountsResponse {
-  accounts: RedbarkAccount[]
+  data: RedbarkAccount[]
+  pagination: PaginationInfo
 }
 
 const MAX_RETRIES = 3
@@ -43,44 +50,66 @@ export class RedbarkClient {
   }
 
   async listConnections(): Promise<RedbarkConnection[]> {
-    const data = await this.get<ConnectionsResponse>('/api/v1/connections')
-    return data.connections
+    const data = await this.get<ConnectionsResponse>('/v1/connections')
+    return data.data
   }
 
   async listAccounts(): Promise<RedbarkAccount[]> {
-    const data = await this.get<AccountsResponse>('/api/v1/accounts')
-    return data.accounts
+    const allAccounts: RedbarkAccount[] = []
+    let offset = 0
+    const limit = 200
+
+    do {
+      const query = new URLSearchParams({
+        limit: String(limit),
+        offset: String(offset),
+      })
+
+      const data = await this.get<AccountsResponse>(
+        `/v1/accounts?${query.toString()}`
+      )
+
+      allAccounts.push(...data.data)
+
+      if (!data.pagination.hasMore) break
+      offset += limit
+    } while (true)
+
+    return allAccounts
   }
 
   async getTransactions(
     params: TransactionsParams
   ): Promise<RedbarkTransaction[]> {
     const allTransactions: RedbarkTransaction[] = []
-    let cursor: string | null = null
+    let offset = 0
+    const limit = params.limit ?? 200
 
     do {
       const query = new URLSearchParams({
         connectionId: params.connectionId,
-        limit: String(params.limit ?? 200),
+        limit: String(limit),
+        offset: String(offset),
       })
 
       if (params.accountId) query.set('accountId', params.accountId)
       if (params.from) query.set('from', params.from)
       if (params.to) query.set('to', params.to)
-      if (cursor) query.set('cursor', cursor)
 
       const data = await this.get<TransactionsResponse>(
-        `/api/v1/transactions?${query.toString()}`
+        `/v1/transactions?${query.toString()}`
       )
 
-      allTransactions.push(...data.transactions)
-      cursor = data.cursor
+      allTransactions.push(...data.data)
 
       logger.debug(
-        { page: allTransactions.length, hasMore: data.hasMore },
+        { fetched: allTransactions.length, hasMore: data.pagination.hasMore },
         'Fetched transaction page'
       )
-    } while (cursor)
+
+      if (!data.pagination.hasMore) break
+      offset += limit
+    } while (true)
 
     return allTransactions
   }

@@ -1,23 +1,24 @@
 export interface RedbarkConnection {
   id: string
   provider: string
+  category: string
+  institutionId: string
   institutionName: string
-  institutionLogo?: string
+  institutionLogo: string | null
   status: string
-  accounts: RedbarkAccount[]
+  lastRefreshedAt: string | null
+  createdAt: string
 }
 
 export interface RedbarkAccount {
   id: string
   connectionId: string
-  provider: string
+  provider: string | null
   name: string
   type: string
-  institutionName: string
-  accountNumber?: string
-  balance?: string
-  availableBalance?: string
-  currency?: string
+  institutionName: string | null
+  accountNumber: string | null
+  currency: string
 }
 
 export interface RedbarkTransaction {
@@ -49,8 +50,14 @@ export interface SyncResult {
   errors: number
 }
 
+export interface PaginationInfo {
+  total: number
+  limit: number
+  offset: number
+  hasMore: boolean
+}
+
 export interface PaginatedResponse<T> {
   data: T[]
-  cursor: string | null
-  hasMore: boolean
+  pagination: PaginationInfo
 }

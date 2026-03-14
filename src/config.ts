@@ -21,7 +21,7 @@ const accountMappingSchema = z
 
 const configSchema = z.object({
   redbarkApiKey: z.string().min(1, 'REDBARK_API_KEY is required'),
-  redbarkApiUrl: z.string().url().default('https://app.redbark.co'),
+  redbarkApiUrl: z.string().url().default('https://api.redbark.co'),
   actualServerUrl: z.string().min(1, 'ACTUAL_SERVER_URL is required'),
   actualPassword: z.string().min(1, 'ACTUAL_PASSWORD is required'),
   actualBudgetId: z.string().min(1, 'ACTUAL_BUDGET_ID is required'),
@@ -45,7 +45,7 @@ export function loadConfig(overrides?: Partial<Record<string, string>>): Config 
 
   const result = configSchema.safeParse({
     redbarkApiKey: env.REDBARK_API_KEY,
-    redbarkApiUrl: env.REDBARK_API_URL || 'https://app.redbark.co',
+    redbarkApiUrl: env.REDBARK_API_URL || 'https://api.redbark.co',
     actualServerUrl: env.ACTUAL_SERVER_URL,
     actualPassword: env.ACTUAL_PASSWORD,
     actualBudgetId: env.ACTUAL_BUDGET_ID,

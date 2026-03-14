@@ -82,7 +82,7 @@ ENVIRONMENT VARIABLES:
   ACTUAL_PASSWORD             (required) Actual Budget server password
   ACTUAL_BUDGET_ID            (required) Budget sync ID (Settings > Advanced)
   ACCOUNT_MAPPING             (required) Account mapping (redbark_id:actual_id,...)
-  REDBARK_API_URL             API base URL (default: https://app.redbark.co)
+  REDBARK_API_URL             API base URL (default: https://api.redbark.co)
   ACTUAL_ENCRYPTION_PASSWORD  E2E encryption password (if enabled)
   ACTUAL_DATA_DIR             Local data cache (default: ./data)
   SYNC_DAYS                   Days to sync (default: 30)
@@ -110,23 +110,35 @@ DOCKER:
 
 async function handleListRedbarkAccounts(): Promise<void> {
   const apiKey = process.env.REDBARK_API_KEY
-  const apiUrl = process.env.REDBARK_API_URL || 'https://app.redbark.co'
+  const apiUrl = process.env.REDBARK_API_URL || 'https://api.redbark.co'
 
   if (!apiKey) {
     console.error(
       'ERROR: REDBARK_API_KEY is not set.\n' +
-        '  → Create an API key at https://app.redbark.co/settings/api-keys'
+        '  → Create an API key at https://app.redbark.co/settings/api'
     )
     process.exit(EXIT_CONFIG_ERROR)
   }
 
   const client = new RedbarkClient(apiKey, apiUrl)
-  const connections = await client.listConnections()
+  const [connections, accounts] = await Promise.all([
+    client.listConnections(),
+    client.listAccounts(),
+  ])
+
+  // Group accounts by connectionId
+  const accountsByConnection = new Map<string, typeof accounts>()
+  for (const account of accounts) {
+    const group = accountsByConnection.get(account.connectionId) || []
+    group.push(account)
+    accountsByConnection.set(account.connectionId, group)
+  }
 
   console.log('\nRedbark Accounts:')
   for (const conn of connections) {
     console.log(`  Connection: ${conn.institutionName} (${conn.provider})`)
-    for (const account of conn.accounts) {
+    const connAccounts = accountsByConnection.get(conn.id) || []
+    for (const account of connAccounts) {
       const mask = account.accountNumber ? `  ${account.accountNumber}` : ''
       console.log(
         `    ${account.id}  ${account.name} (${account.type})${mask}`

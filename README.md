@@ -82,7 +82,7 @@ docker run --rm --env-file .env \
 | `ACTUAL_PASSWORD` | Yes | — | Actual Budget server password |
 | `ACTUAL_BUDGET_ID` | Yes | — | Budget sync ID (Settings > Advanced in Actual) |
 | `ACCOUNT_MAPPING` | Yes | — | Account mapping (see below) |
-| `REDBARK_API_URL` | No | `https://app.redbark.co` | Redbark API base URL |
+| `REDBARK_API_URL` | No | `https://api.redbark.co` | Redbark API base URL |
 | `ACTUAL_ENCRYPTION_PASSWORD` | No | — | E2E encryption password if enabled |
 | `ACTUAL_DATA_DIR` | No | `./data` | Local cache directory for Actual's SQLite DB |
 | `SYNC_DAYS` | No | `30` | Number of days of history to sync |
