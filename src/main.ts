@@ -12,6 +12,7 @@ const EXIT_CONNECTION_ERROR = 3
 
 interface CliFlags {
   listRedbarkAccounts: boolean
+  listRedbarkCategories: boolean
   listActualAccounts: boolean
   dryRun: boolean
   days?: number
@@ -21,6 +22,7 @@ interface CliFlags {
 function parseArgs(argv: string[]): CliFlags {
   const flags: CliFlags = {
     listRedbarkAccounts: false,
+    listRedbarkCategories: false,
     listActualAccounts: false,
     dryRun: false,
     help: false,
@@ -31,6 +33,9 @@ function parseArgs(argv: string[]): CliFlags {
     switch (arg) {
       case '--list-redbark-accounts':
         flags.listRedbarkAccounts = true
+        break
+      case '--list-redbark-categories':
+        flags.listRedbarkCategories = true
         break
       case '--list-actual-accounts':
         flags.listActualAccounts = true
@@ -70,8 +75,9 @@ USAGE:
   redbark-actual-sync [OPTIONS]
 
 OPTIONS:
-  --list-redbark-accounts   List Redbark accounts (to find IDs for mapping)
-  --list-actual-accounts    List Actual Budget accounts (to find IDs for mapping)
+  --list-redbark-accounts     List Redbark accounts (to find IDs for mapping)
+  --list-redbark-categories   List Redbark transaction categories
+  --list-actual-accounts      List Actual Budget accounts (to find IDs for mapping)
   --dry-run                 Preview what would be imported without writing
   --days <number>           Number of days to sync (default: 30)
   --help, -h                Show this help message
@@ -102,6 +108,9 @@ EXAMPLES:
   # Find account IDs for mapping
   redbark-actual-sync --list-redbark-accounts
   redbark-actual-sync --list-actual-accounts
+
+  # List available Redbark transaction categories
+  redbark-actual-sync --list-redbark-categories
 
 DOCKER:
   docker run --rm --env-file .env -v sync-data:/app/data ghcr.io/redbark-co/actual-sync
@@ -148,6 +157,28 @@ async function handleListRedbarkAccounts(): Promise<void> {
   }
 }
 
+async function handleListRedbarkCategories(): Promise<void> {
+  const apiKey = process.env.REDBARK_API_KEY
+  const apiUrl = process.env.REDBARK_API_URL || 'https://api.redbark.co'
+
+  if (!apiKey) {
+    console.error(
+      'ERROR: REDBARK_API_KEY is not set.\n' +
+        '  → Create an API key at https://app.redbark.co/settings/api'
+    )
+    process.exit(EXIT_CONFIG_ERROR)
+  }
+
+  const client = new RedbarkClient(apiKey, apiUrl)
+  const categories = await client.listCategories()
+
+  console.log('\nRedbark Transaction Categories:')
+  for (const cat of categories) {
+    console.log(`  ${cat.label}`)
+  }
+  console.log()
+}
+
 async function handleListActualAccounts(): Promise<void> {
   const serverUrl = process.env.ACTUAL_SERVER_URL
   const password = process.env.ACTUAL_PASSWORD
@@ -192,6 +223,11 @@ async function main(): Promise<void> {
   // Handle list commands (don't need full config)
   if (flags.listRedbarkAccounts) {
     await handleListRedbarkAccounts()
+    process.exit(EXIT_SUCCESS)
+  }
+
+  if (flags.listRedbarkCategories) {
+    await handleListRedbarkCategories()
     process.exit(EXIT_SUCCESS)
   }
 

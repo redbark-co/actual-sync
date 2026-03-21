@@ -35,6 +35,11 @@ export interface RedbarkTransaction {
   merchantCategoryCode?: string
 }
 
+export interface RedbarkCategory {
+  key: string
+  label: string
+}
+
 export interface AccountMapping {
   redbarkAccountId: string
   actualAccountId: string

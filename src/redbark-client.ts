@@ -1,6 +1,7 @@
 import { logger } from './logger.js'
 import type {
   RedbarkAccount,
+  RedbarkCategory,
   RedbarkConnection,
   RedbarkTransaction,
 } from './types.js'
@@ -34,6 +35,10 @@ interface AccountsResponse {
   pagination: PaginationInfo
 }
 
+interface CategoriesResponse {
+  categories: RedbarkCategory[]
+}
+
 const MAX_RETRIES = 3
 const INITIAL_RETRY_DELAY_MS = 1000
 const REQUEST_TIMEOUT_MS = 30_000
@@ -52,6 +57,11 @@ export class RedbarkClient {
   async listConnections(): Promise<RedbarkConnection[]> {
     const data = await this.get<ConnectionsResponse>('/v1/connections')
     return data.data
+  }
+
+  async listCategories(): Promise<RedbarkCategory[]> {
+    const data = await this.get<CategoriesResponse>('/v1/categories')
+    return data.categories
   }
 
   async listAccounts(): Promise<RedbarkAccount[]> {
