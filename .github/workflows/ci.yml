@@ -61,8 +61,8 @@ jobs:
       - name: Verify --help runs
         run: docker run --rm actual-sync:smoke-test --help
 
-      - name: Verify native modules load
-        run: docker run --rm --entrypoint node actual-sync:smoke-test -e "require('better-sqlite3'); console.log('better-sqlite3 OK')"
+      - name: Verify Redbark API connectivity
+        run: docker run --rm -e REDBARK_API_KEY=${{ secrets.REDBARK_API_KEY }} actual-sync:smoke-test --list-redbark-accounts
 
   docker:
     name: Docker
