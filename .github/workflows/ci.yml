@@ -42,9 +42,31 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
 
+  docker-smoke-test:
+    name: Docker Smoke Test
+    needs: [typecheck, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: actual-sync:smoke-test
+          cache-from: type=gha
+
+      - name: Verify --help runs
+        run: docker run --rm actual-sync:smoke-test --help
+
+      - name: Verify native modules load
+        run: docker run --rm --entrypoint node actual-sync:smoke-test -e "require('better-sqlite3'); console.log('better-sqlite3 OK')"
+
   docker:
     name: Docker
-    needs: [typecheck, test]
+    needs: [typecheck, test, docker-smoke-test]
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
