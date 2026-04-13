@@ -48,6 +48,9 @@ ACTUAL_SERVER_URL=http://localhost:5006
 ACTUAL_PASSWORD=your-password
 ACTUAL_BUDGET_ID=1cfdbb80-6274-49bf-b0c2-737235a4c81f
 ACCOUNT_MAPPING=redbark-acc-id:actual-acc-id,redbark-acc-id-2:actual-acc-id-2
+
+# If your budget has end-to-end encryption enabled:
+# ACTUAL_ENCRYPTION_PASSWORD=your-encryption-password
 ```
 
 ### 4. Run
@@ -88,6 +91,10 @@ docker run --rm --env-file .env \
 | `SYNC_DAYS` | No | `30` | Number of days of history to sync |
 | `LOG_LEVEL` | No | `info` | `debug`, `info`, `warn`, or `error` |
 | `DRY_RUN` | No | `false` | Set to `true` to preview without importing |
+
+### Encrypted Databases
+
+If your Actual Budget has end-to-end encryption enabled, you must set `ACTUAL_ENCRYPTION_PASSWORD` in addition to `ACTUAL_PASSWORD`. This is the encryption passphrase you chose when enabling E2E encryption in Actual, not your server login password.
 
 ### Account Mapping
 

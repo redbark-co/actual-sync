@@ -9,6 +9,7 @@ services:
       - ACTUAL_SERVER_URL=http://actual-server:5006
       - ACTUAL_PASSWORD=your-actual-password
       - ACTUAL_BUDGET_ID=your-budget-sync-id
+      # - ACTUAL_ENCRYPTION_PASSWORD=your-encryption-password  # if E2E encryption is enabled
       - ACCOUNT_MAPPING=redbark-acc-id:actual-acc-id
       - SYNC_DAYS=30
       - LOG_LEVEL=info
