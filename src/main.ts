@@ -89,7 +89,7 @@ ENVIRONMENT VARIABLES:
   ACTUAL_PASSWORD             (required) Actual Budget server password
   ACTUAL_BUDGET_ID            (required) Budget sync ID (Settings > Advanced)
   ACCOUNT_MAPPING             (required) Account mapping (redbark_id:actual_id,...)
-  REDBARK_API_URL             API base URL (default: https://api.redbark.co)
+  REDBARK_API_URL             API base URL (default: https://api.redbark.com)
   ACTUAL_ENCRYPTION_PASSWORD  E2E encryption password (if enabled)
   ACTUAL_DATA_DIR             Local data cache (default: ./data)
   SYNC_DAYS                   Days to sync (default: 30)
@@ -120,12 +120,12 @@ DOCKER:
 
 async function handleListRedbarkAccounts(): Promise<void> {
   const apiKey = process.env.REDBARK_API_KEY
-  const apiUrl = process.env.REDBARK_API_URL || 'https://api.redbark.co'
+  const apiUrl = process.env.REDBARK_API_URL || 'https://api.redbark.com'
 
   if (!apiKey) {
     console.error(
       'ERROR: REDBARK_API_KEY is not set.\n' +
-        '  → Create an API key at https://app.redbark.co/settings/api'
+        '  → Create an API key at https://app.redbark.com/settings'
     )
     process.exit(EXIT_CONFIG_ERROR)
   }
@@ -160,12 +160,12 @@ async function handleListRedbarkAccounts(): Promise<void> {
 
 async function handleListRedbarkCategories(): Promise<void> {
   const apiKey = process.env.REDBARK_API_KEY
-  const apiUrl = process.env.REDBARK_API_URL || 'https://api.redbark.co'
+  const apiUrl = process.env.REDBARK_API_URL || 'https://api.redbark.com'
 
   if (!apiKey) {
     console.error(
       'ERROR: REDBARK_API_KEY is not set.\n' +
-        '  → Create an API key at https://app.redbark.co/settings/api'
+        '  → Create an API key at https://app.redbark.com/settings'
     )
     process.exit(EXIT_CONFIG_ERROR)
   }
