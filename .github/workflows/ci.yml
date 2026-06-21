@@ -62,6 +62,7 @@ jobs:
         run: docker run --rm actual-sync:smoke-test --help
 
       - name: Verify Redbark API connectivity
+        if: ${{ secrets.REDBARK_API_KEY != '' }}
         run: docker run --rm -e REDBARK_API_KEY=${{ secrets.REDBARK_API_KEY }} actual-sync:smoke-test --list-redbark-accounts
 
   docker:
@@ -84,7 +85,7 @@ jobs:
       - uses: docker/metadata-action@v5
         id: meta
         with:
-          images: ghcr.io/redbark-co/actual-sync
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha,prefix=sha-,format=short
