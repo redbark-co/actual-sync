@@ -50,6 +50,7 @@ describe('loadConfig', () => {
     expect(config.syncDays).toBe(30)
     expect(config.dryRun).toBe(false)
     expect(config.logLevel).toBe('info')
+    expect(config.actualReimportDeleted).toBe(false)
   })
 
   it('applies defaults', () => {
@@ -57,6 +58,7 @@ describe('loadConfig', () => {
     expect(config.redbarkApiUrl).toBe('https://api.redbark.com')
     expect(config.actualDataDir).toBe('./data')
     expect(config.syncDays).toBe(30)
+    expect(config.actualReimportDeleted).toBe(false)
   })
 
   it('accepts overrides', () => {
@@ -65,10 +67,12 @@ describe('loadConfig', () => {
       SYNC_DAYS: '60',
       DRY_RUN: 'true',
       LOG_LEVEL: 'debug',
+      ACTUAL_REIMPORT_DELETED: 'true',
     })
     expect(config.syncDays).toBe(60)
     expect(config.dryRun).toBe(true)
     expect(config.logLevel).toBe('debug')
+    expect(config.actualReimportDeleted).toBe(true)
   })
 
   it('throws on missing required fields', () => {

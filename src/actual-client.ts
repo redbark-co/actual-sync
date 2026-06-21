@@ -249,7 +249,8 @@ export async function withActualBudget<T>(
     getAccounts: () => Promise<ActualAccount[]>
     importTransactions: (
       accountId: string,
-      transactions: ActualTransaction[]
+      transactions: ActualTransaction[],
+      opts?: { reimportDeleted?: boolean }
     ) => Promise<ImportResult>
   }) => Promise<T>
 ): Promise<T> {
@@ -292,13 +293,13 @@ export async function withActualBudget<T>(
       getAccounts: async () => {
         return (await api.getAccounts()) as ActualAccount[]
       },
-      importTransactions: async (accountId, transactions) => {
+      importTransactions: async (accountId, transactions, opts) => {
         // The API type requires `account` on each transaction object
         const withAccount = transactions.map((t) => ({
           ...t,
           account: accountId,
         }))
-        return (await api.importTransactions(accountId, withAccount)) as ImportResult
+        return (await api.importTransactions(accountId, withAccount, opts)) as ImportResult
       },
     })
 

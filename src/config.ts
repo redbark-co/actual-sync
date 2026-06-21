@@ -36,6 +36,10 @@ const configSchema = z.object({
     .string()
     .transform((v) => v === 'true')
     .default('false'),
+  actualReimportDeleted: z
+    .string()
+    .transform((v) => v === 'true')
+    .default('false'),
 })
 
 export type Config = z.infer<typeof configSchema>
@@ -55,6 +59,7 @@ export function loadConfig(overrides?: Partial<Record<string, string>>): Config 
     syncDays: env.SYNC_DAYS || '30',
     logLevel: env.LOG_LEVEL || 'info',
     dryRun: env.DRY_RUN || 'false',
+    actualReimportDeleted: env.ACTUAL_REIMPORT_DELETED || 'false',
   })
 
   if (!result.success) {

@@ -95,6 +95,7 @@ ENVIRONMENT VARIABLES:
   SYNC_DAYS                   Days to sync (default: 30)
   LOG_LEVEL                   debug, info, warn, error (default: info)
   DRY_RUN                     true/false (default: false)
+  ACTUAL_REIMPORT_DELETED     true/false (default: false)
 
 EXAMPLES:
   # Run sync
