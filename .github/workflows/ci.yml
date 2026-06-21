@@ -46,6 +46,8 @@ jobs:
     name: Docker Smoke Test
     needs: [typecheck, test]
     runs-on: ubuntu-latest
+    env:
+      REDBARK_API_KEY: ${{ secrets.REDBARK_API_KEY }}
     steps:
       - uses: actions/checkout@v6
 
@@ -62,8 +64,8 @@ jobs:
         run: docker run --rm actual-sync:smoke-test --help
 
       - name: Verify Redbark API connectivity
-        if: ${{ secrets.REDBARK_API_KEY != '' }}
-        run: docker run --rm -e REDBARK_API_KEY=${{ secrets.REDBARK_API_KEY }} actual-sync:smoke-test --list-redbark-accounts
+        if: ${{ env.REDBARK_API_KEY != '' }}
+        run: docker run --rm -e REDBARK_API_KEY=${{ env.REDBARK_API_KEY }} actual-sync:smoke-test --list-redbark-accounts
 
   docker:
     name: Docker
